@@ -1,0 +1,311 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* Reset dan Pengaturan Dasar */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    background: #1d1d1d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    perspective: 2000px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.portfolio-container {
+    width: 30vw;
+    height: 80vh;
+    transform-style: preserve-3d;
+    transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.portfolio-container.zoom-in {
+    transform: scale(1.2) translateY(50px);
+}
+
+.book-3d {
+    --book-thickness: 30px;
+    --book-width: 30vw;
+    --book-height: 80vh;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: rotateY(-35deg);
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+.book-3d::before {
+    content: '';
+    position: absolute;
+    top: 2%;
+    width: var(--book-thickness);
+    height: 96%;
+    background: linear-gradient(to right, #e0e0e0, #ffffff);
+    transform:
+        translateX(calc(var(--book-width) - (var(--book-thickness) / 2))) rotateY(90deg) translateX(calc(var(--book-thickness) / 2));
+    transform-origin: left center;
+    z-index: 1;
+    border-radius: 2px;
+}
+
+.book-3d::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Warna sampul belakang, sedikit lebih gelap */
+    background: #d8d7d3;
+    border-radius: 5px;
+    /* Mendorong sampul belakang ke belakang sejauh ketebalan buku */
+    transform: translateZ(calc(-1 * var(--book-thickness)));
+    /* Bayangan untuk memberi ilusi kedalaman */
+    box-shadow: -10px 0 30px 5px rgba(0, 0, 0, 0.3);
+}
+
+.book-3d.hovered {
+    transform: rotateY(-10deg);
+}
+
+.cover-front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-origin: left center;
+    transform: rotateY(0deg) translateZ(15px);
+    transition: transform 1s ease;
+    z-index: 5;
+}
+
+.book-3d.open .cover-front {
+    transform: rotateY(-160deg) translateZ(15px);
+}
+
+.cover {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom right, #000, #222);
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+    font-weight: 500;
+    font-size: clamp(1rem, 1.2vw, 1.6rem);
+    color: white;
+    position: relative;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1), 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.cover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.1), transparent);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.cover-left {
+    display: grid;
+    grid-template-rows: 2fr 5fr;
+    /* gap: 10px; */
+    padding: 10px;
+    min-height: 0;
+}
+
+.cover-title {
+    padding: 10px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+
+.cover-image {
+    background-color: #111;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cover-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8) contrast(1.2) grayscale(80%) drop-shadow(0 0 10px white);
+}
+
+.cover-right {
+    position: relative;
+}
+
+.quote,
+.timeline {
+    position: absolute;
+    white-space: nowrap;
+    transform: rotate(-90deg);
+    transform-origin: top right;
+    right: 20%;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.quote {
+    top: 20%;
+    font-style: italic;
+}
+
+.timeline {
+    top: 70%;
+}
+
+.inner-pages {
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 5px;
+    position: absolute;
+    transform: translateZ(0px);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.book-3d.open .inner-pages {
+    opacity: 1;
+}
+
+.inner-pages .page-content {
+    display: none;
+    height: 100%;
+    padding: 20px;
+}
+
+.inner-pages .page-content.active {
+    display: block;
+}
+
+.nav-buttons {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.nav-buttons button {
+    background: #000;
+    color: white;
+    border: 1px solid white;
+    padding: 6px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.spine {
+    position: absolute;
+    width: 12px;
+    height: 100%;
+    left: -6px;
+    background: linear-gradient(to right, #111 0%, #333 50%, #111 100%);
+    transform: rotateY(90deg);
+    transform-origin: right center;
+    z-index: 0;
+    border-radius: 2px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.back-cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    border-radius: 5px;
+    transform: rotateY(-180deg) translateZ(15px);
+    backface-visibility: hidden;
+    z-index: -1;
+    box-shadow: -3px 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.page-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fdfdfd;
+    border-radius: 5px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    transform-origin: left center;
+    z-index: 0;
+}
+
+.layer-1 {
+    transform: translateZ(-2px);
+}
+
+.layer-2 {
+    transform: translateZ(-4px);
+}
+
+.layer-3 {
+    transform: translateZ(-6px);
+}
+
+/* Media query untuk mobile tetap relevan, namun kita targetkan.book-3d */
+@media (max-width: 768px) {
+    .book-3d {
+        transform: rotateY(0deg);
+        /* Di mobile, tampilkan lurus */
+        width: 80vw;
+        height: 70vh;
+    }
+
+    .book-3d:hover {
+        transform: rotateY(0deg) scale(1.02);
+        /* Efek hover lebih simpel di mobile */
+    }
+
+    /* Sembunyikan efek ketebalan di mobile agar tidak aneh */
+    .book-3d::before,
+    .book-3d::after {
+        display: none;
+    }
+
+    .cover {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        font-size: clamp(1rem, 4vw, 1.4rem);
+    }
+
+    .cover-left {
+        grid-template-rows: 1fr 2fr;
+    }
+
+    .cover-right {
+        position: static;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+
+    .quote,
+    .timeline {
+        position: static;
+        transform: none;
+        white-space: normal;
+        text-align: center;
+    }
+}
