@@ -22,7 +22,7 @@ html {
 }
 
 .portfolio-container.zoom-in {
-    transform: scale(1.2) translateY(50px);
+    transform: translateX(40%);
 }
 
 .book-3d {
@@ -35,7 +35,6 @@ html {
     transform: rotateY(-35deg);
     transform-style: preserve-3d;
     transition: transform 0.5s ease-in-out;
-    cursor: pointer;
 }
 
 .book-3d::before {
@@ -69,7 +68,7 @@ html {
 }
 
 .book-3d.hovered {
-    transform: rotateY(-10deg);
+    transform: rotateY(0deg);
 }
 
 .cover-front {
@@ -99,6 +98,7 @@ html {
     color: white;
     position: relative;
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.1), 0 0 50px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }
 
 .cover::after {
@@ -113,10 +113,42 @@ html {
     border-bottom-right-radius: 5px;
 }
 
+.cover {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom right, #222, #111);
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+    font-weight: 500;
+    font-size: clamp(1rem, 1.2vw, 1.6rem);
+    color: white;
+    position: relative;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1), 0 0 50px rgba(0, 0, 0, 0.5);
+    transition: background 0.4s ease-out;
+}
+
+/* Transisi untuk semua elemen anak */
+.cover * {
+    transition: opacity 0.3s ease-out;
+}
+
+/* Kelas baru untuk mengubah tampilan cover saat buku terbuka */
+.cover.plain-inner {
+    background: linear-gradient(to bottom right, #333,#000, #222, #555);
+}
+
+.cover.plain-inner * {
+    opacity: 0;
+}
+
+/* Hilangkan pseudo-element yang tidak diperlukan */
+
 .cover-left {
     display: grid;
     grid-template-rows: 2fr 5fr;
-    /* gap: 10px; */
+    gap: 5%;
     padding: 10px;
     min-height: 0;
 }
@@ -126,7 +158,6 @@ html {
     display: grid;
     grid-template-rows: auto 1fr;
 }
-
 
 .cover-image {
     background-color: #111;
@@ -140,7 +171,7 @@ html {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.8) contrast(1.2) grayscale(80%) drop-shadow(0 0 10px white);
+    filter: brightness(0.8) contrast(1.2) grayscale(90%);
 }
 
 .cover-right {
@@ -168,9 +199,9 @@ html {
 }
 
 .inner-pages {
-    width: 100%;
-    height: 100%;
-    background: white;
+    width: 95%;
+    height: 98%;
+    background: yellow;
     border-radius: 5px;
     position: absolute;
     transform: translateZ(0px);
@@ -179,6 +210,7 @@ html {
     transition: opacity 0.5s ease;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    margin-top: 1.4%;
 }
 
 .book-3d.open .inner-pages {
